@@ -4,18 +4,17 @@ import {
   createStackNavigator,
   createBottomTabNavigator,
 } from 'react-navigation';
-
 import TabBarIcon from '../components/TabBarIcon';
-import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
-import SettingsScreen from '../screens/SettingsScreen';
+import ListCardView from '../screens/ListCardView'
+import NewCard from '../screens/NewCard';
+import ManagerCard from '../screens/ManagerCard'
 
 const HomeStack = createStackNavigator({
-  Home: HomeScreen,
+  HomeStack: ListCardView,
 });
 
 HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
+  tabBarLabel: 'Lista',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -28,12 +27,13 @@ HomeStack.navigationOptions = {
   ),
 };
 
-const LinksStack = createStackNavigator({
-  Links: LinksScreen,
+const NewCardView = createStackNavigator({
+  NewCard: NewCard,
+  ManagerCard: ManagerCard
 });
 
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Links',
+NewCardView.navigationOptions = {
+  tabBarLabel: 'Novo Cartão',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -42,22 +42,7 @@ LinksStack.navigationOptions = {
   ),
 };
 
-const SettingsStack = createStackNavigator({
-  Settings: SettingsScreen,
-});
-
-SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
-    />
-  ),
-};
-
 export default createBottomTabNavigator({
   HomeStack,
-  LinksStack,
-  SettingsStack,
+  NewCardView,
 });
