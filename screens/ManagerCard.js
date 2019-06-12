@@ -38,6 +38,10 @@ class ManagerCard extends PureComponent {
   render() {
     let { title, cards } = this.state.card
     console.log('title', title, 'cards', cards)
+    if(cards !== undefined && Object.entries(cards).length === 0){
+      cards = []
+    }
+  
     return (
       <View style={{
         flex: 1,
@@ -53,11 +57,21 @@ class ManagerCard extends PureComponent {
             size={20}
             icon={'md-checkmark'} />
           <ViewCard style={styles.container}
-            title={'Apagar Baralho'}          
+            title={'Apagar Baralho'}
             icon={'md-close-circle'} />
         </View>
         <View>
           <FlatList style={styles.containerList}
+            ListEmptyComponent={<View style={{
+              height: 200,
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}>
+              <Text>
+                Sem perguntas ainda...
+                </Text>
+            </View>}
             data={cards}
             renderItem={({ item }) => <Text
               key={item.key}
@@ -70,8 +84,6 @@ class ManagerCard extends PureComponent {
     )
   }
 }
-
-
 
 ManagerCard.navigationOptions = {
   title: 'Gerenciar Baralho',
