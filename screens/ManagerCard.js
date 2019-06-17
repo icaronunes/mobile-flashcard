@@ -1,64 +1,100 @@
 import React, { PureComponent } from 'react'
 import { View, TouchableOpacity, Text, FlatList, StyleSheet } from 'react-native'
+import AddQuestionModal from '../screens/AddQuestionModal'
 import { Ionicons } from '@expo/vector-icons';
-import { getCards } from '../constants/Date'
-import ItemCardList from '../screens/ItemCardList'
+import { deleteItem } from '../constants/Date'
+import { connect } from 'react-redux'
+import { receiveEntry } from '../actions/index'
 
 function ViewCard(props) {
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={props.onPress}>
       <Text>{props.title}</Text>
       <Ionicons
-        name={props.icon}
-        size={60} />
+        name={props.icon.icon}
+        size={props.size}
+        color={props.icon.cor}
+      />
       {props.inicio
         ? <Text style={{ marginTop: 20 }}>Começar Quiz</Text>
-        : <Text>{props.size}</Text>
+        : <Text>{props.length ? props.length : ""}</Text>
       }
     </TouchableOpacity>
   )
 }
-
 class ManagerCard extends PureComponent {
 
   state = {
-    card: ''
+    card: '',
+    modal: false,
   }
 
-  componentDidMount() {
-
+  delete = async () => {
     let key = this.props.navigation.state.params.key
-    getCards(key).then(res => {
-      this.setState({
-        card: res
-      })
-    })
+    this.props.handleKey(key)
+    this.props.navigation.navigate('ListCardView')
+  }
+
+  addQuestion = () => {
+    this.setState(() => ({
+      modal: !this.state.modal
+    }))
+  }
+
+  play = () => {
+    console.log('play')
+  }
+
+  handleModal = () => {
+    this.setState(() => ({
+      modal: !this.state.modal
+    }))
+  }
+
+  saveQuestion = () => {
+
   }
 
   render() {
-    let { title, cards } = this.state.card
-    console.log('title', title, 'cards', cards)
-    if(cards !== undefined && Object.entries(cards).length === 0){
+
+    let key = this.props.navigation.state.params.key
+    let { cards, title } = this.props.cards[key]
+
+    if (cards !== undefined && Object.entries(cards).length === 0) {
       cards = []
+    } else {
+      cards = {}
     }
-  
+
+    if (this.state.modal) {
+      return <AddQuestionModal visible={this.state.modal} handleModal={this.handleModal} id={key} />
+    }
+
     return (
       <View style={{
         flex: 1,
       }}>
         <ViewCard
           title={title}
-          icon={'md-filing'}
+          icon={{ icon: 'md-filing', cor: '#005' }}
+          size={55}
           inicio={true}
+          onPress={this.play}
         />
         <View style={styles.containerAddDelete}>
           <ViewCard
             title={'Adicionar Pergunta'}
-            size={20}
-            icon={'md-checkmark'} />
+            size={50}
+            length={Object.entries(cards).length}
+            icon={{ icon: 'md-checkmark', cor: '#070' }}
+            onPress={this.addQuestion}
+          />
           <ViewCard style={styles.container}
             title={'Apagar Baralho'}
-            icon={'md-close-circle'} />
+            size={50}
+            icon={{ icon: 'md-close-circle', cor: '#700' }}
+            onPress={this.delete}
+          />
         </View>
         <View>
           <FlatList style={styles.containerList}
@@ -85,11 +121,29 @@ class ManagerCard extends PureComponent {
   }
 }
 
-ManagerCard.navigationOptions = {
-  title: 'Gerenciar Baralho',
-};
+function mapStatetoProps(state) {
 
-export default ManagerCard;
+  return {
+    cards: state
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    handleKey(key) {
+      deleteItem(key)
+        .then((obj) => {
+          console.log('delete mapDispatchToProps', obj)
+          dispatch(receiveEntry(obj))
+        })
+        .catch(erro => {
+          console.log('delete', erro)
+        })
+    }
+  }
+}
+
+export default connect(mapStatetoProps, mapDispatchToProps)(ManagerCard)
 
 const styles = StyleSheet.create({
   container: {

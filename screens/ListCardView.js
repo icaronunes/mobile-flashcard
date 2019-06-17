@@ -1,25 +1,50 @@
 import React, { PureComponent } from 'react'
-import { View, FlatList, Text, StyleSheet } from 'react-native'
+import { View, FlatList, Text, TouchableOpacity } from 'react-native'
 import ItemCardList from '../screens/ItemCardList'
+import { getAllCards, objectToArray } from '../constants/Date'
+import { connect } from 'react-redux'
+import { receiveEntry } from '../actions/index'
+class ListCardView extends PureComponent {
 
-export default class ListCardView extends PureComponent {
+  state = {
+    cards: {}
+  }
+
+  componentDidMount() {
+    const { putList } = this.props
+    putList()
+  }
+
+  handleClickItem = (key) => {
+    this.props.navigation.navigate('ManagerCard', { key: key })
+  }
 
   render() {
-    const itens = [
-      { key: 'Devin' },
-      { key: 'Jackson' },
-      { key: 'James' },
-      { key: 'Joel' },
-      { key: 'John' },
-      { key: 'Jillian' },
-      { key: 'Jimmy' },
-      { key: 'Julie' }
-    ]
+    let cards = this.props.cards
+    if (Object.entries(cards).length === 0) {
+      cards = []
+    } else {
+      cards = objectToArray(cards)
+    }
 
-    return (     
-      <FlatList      
-        data={itens}
-        renderItem={({ item}) => <ItemCardList item={item}/>}/>
+    return (
+      <FlatList
+        ListEmptyComponent={<View style={{
+          height: 200,
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}>
+          <Text>
+            Sem perguntas ainda...
+          </Text>
+        </View>}
+        data={cards}
+        renderItem={({ item }) => {
+          return <TouchableOpacity onPress={() => { this.handleClickItem(item.key) }}>
+            <ItemCardList key={item.key} item={item} />
+          </TouchableOpacity>
+        }} />
     )
   }
 }
@@ -27,3 +52,21 @@ export default class ListCardView extends PureComponent {
 ListCardView.navigationOptions = {
   title: 'Lista de Cartas',
 };
+
+function mapStateToProps(state) {
+  console.log('ListCardView', state)
+  return { cards: state }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    putList() {
+      getAllCards()
+        .then(result => {
+          dispatch(receiveEntry(result))
+        })
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ListCardView)

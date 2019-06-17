@@ -8,9 +8,12 @@ import TabBarIcon from '../components/TabBarIcon';
 import ListCardView from '../screens/ListCardView'
 import NewCard from '../screens/NewCard';
 import ManagerCard from '../screens/ManagerCard'
+import ItemCardList from '../screens/ItemCardList'
 
 const HomeStack = createStackNavigator({
-  HomeStack: ListCardView,
+  ListCardView: ListCardView,
+  ItemCardList: ItemCardList,
+  ManagerCard: ManagerCard
 });
 
 HomeStack.navigationOptions = {
@@ -44,5 +47,5 @@ NewCardView.navigationOptions = {
 
 export default createBottomTabNavigator({
   HomeStack,
-  NewCardView,
+  NewCardView
 });

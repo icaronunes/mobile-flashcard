@@ -3,21 +3,26 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 
 class ItemCardList extends Component {
-  render() {
-    let { key } = this.props.item
 
+  render() {
+    let { item } = this.props
     return (
-      <TouchableOpacity style={styles.container}>
-        <Text style={styles.text}>Title</Text>
+      <View style={styles.container}>
+        <Text style={styles.text}>{item.title}</Text>
         <View>
-          <Text style={styles.numberCard}>20</Text>
+          <Text style={styles.numberCard}>{item.cards && Object.entries(item.cards).length}</Text>
           <Ionicons style={styles.photo} name='md-card' size={140} color="#07F" />
         </View>
-        <Text>{key}</Text>
-      </TouchableOpacity>
+        <Text>...</Text>
+      </View>
     )
   }
 }
+
+ItemCardList.navigationOptions = {
+  title: 'Gerenciar Baralho',
+};
+
 export default ItemCardList
 
 const styles = StyleSheet.create({

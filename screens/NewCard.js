@@ -1,10 +1,9 @@
 import React, { PureComponent } from 'react'
-import { View, TouchableOpacity, TextInput, StyleSheet, AsyncStorage } from 'react-native'
+import { View, TouchableOpacity, TextInput, StyleSheet } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
-import { createCard, timeToString } from '../constants/Date'
+import { createCard, generateUID } from '../constants/Date'
 
 class NewCard extends PureComponent {
-
     state = {
         text: ''
     }
@@ -12,10 +11,9 @@ class NewCard extends PureComponent {
     onPress = async () => {
         if (this.state.text !== '') {
             try {
-                let key = timeToString()
+                let key = generateUID()
                 createCard(key, this.state.text).then(() => {
-                    console.log('Salvo')
-                    this.props.navigation.push('ManagerCard', { key: key})
+                    this.props.navigation.push('ManagerCard', { key: key })
                 })
             } catch (erro) {
                 console.log("ERRO", erro)
