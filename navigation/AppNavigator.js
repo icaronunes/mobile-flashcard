@@ -1,9 +1,10 @@
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import MainTabNavigator from './MainTabNavigator';
 import ListCardView from '../screens/ListCardView';
+import { connect } from 'react-redux'
 
 
-export default createAppContainer(
+const AppNavigator = createAppContainer(
   createSwitchNavigator({
     // You could add another route here for authentication.
     // Read more at https://reactnavigation.org/docs/en/auth-flow.html    
@@ -11,3 +12,5 @@ export default createAppContainer(
    //List: ListCardView,   
   })
 );
+
+export default connect()(AppNavigator)

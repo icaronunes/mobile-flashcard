@@ -1,16 +1,17 @@
 import { AsyncStorage } from 'react-native'
+import { receiveEntry } from '../actions/index'
 
 export const STORE = 'STORE'
 
 export async function createCard(key, title) {
-    return await AsyncStorage.getItem(STORE)
-        .then((result) => {
-            let data = result ? JSON.parse(result) : {}
-            let objectCard = createObejctCard()
-            objectCard['title'] = title
-            data[key] = objectCard
-            AsyncStorage.setItem(STORE, JSON.stringify(data))
-        })
+    let result = await AsyncStorage.getItem(STORE)
+    let data = result ? JSON.parse(result) : {}
+    let objectCard = createObejctCard()
+    objectCard['title'] = title
+    data[key] = objectCard
+    await AsyncStorage.setItem(STORE, JSON.stringify(data))
+    console.log('createCard', data)
+    return data
 }
 
 export async function getCards(key) {
@@ -21,30 +22,49 @@ export async function getCards(key) {
         })
 }
 
-export async function saveQuestion(key, question) {
-    return await getCards(key)
-        .then((card) => {
-            card.cards[generateUID()] = question
+export async function saveQuestions(key, question, dispatch) {
+    return await await AsyncStorage.getItem(STORE)
+        .then(json => {
+            let data = JSON.parse(json)
+            console.log('saveQuestions A', data[key].cards, 'key', key)                    
+            data[key].cards[generateUID()] = { question, ok: false }
+            console.log('saveQuestions B', data)
+            AsyncStorage.setItem(STORE, JSON.stringify(data))
+            dispatch(receiveEntry(data))
         })
 }
 
-export async function getAllCards() {
-    return await AsyncStorage.getItem(STORE)
-        .then(result => {
-            console.log("getAllCards")
-            return JSON.parse(result)
+export async function OkQuestion(key, keyQuestion, ok, dispatch) {
+    return await await AsyncStorage.getItem(STORE)
+        .then(json => {
+            let data = JSON.parse(json)
+            console.log('saveQuestions A', data[key].cards[keyQuestion], 'key', key)                    
+            data[key].cards[keyQuestion]['ok'] = ok
+            console.log('saveQuestions B', data)
+            AsyncStorage.setItem(STORE, JSON.stringify(data))
+            dispatch(receiveEntry(data))
         })
 }
 
-export async function deleteItem(key) {
+export async function getAllCards(dispatch) {
     return await AsyncStorage.getItem(STORE)
         .then(result => {
-            const obj = JSON.parse(result)
-            delete obj[key]
-             AsyncStorage.clear().then(() => {
-             AsyncStorage.setItem(STORE, JSON.stringify(obj))
-            })
-            return obj
+            console.log("getAllCards", result)
+            dispatch(receiveEntry(JSON.parse(result)))
+        })
+}
+
+export async function deleteItem(key, dispatch) {
+    return await AsyncStorage.getItem(STORE)
+        .then((result) => {
+            console.log('deleteItem', result)
+            let obj = JSON.parse(result)
+            console.log('deleteItem antes', obj)
+            obj[key] = undefined
+            delete obj[key] //data[key] = undefined ASSIM??????
+            console.log('deleteItem depois', obj)
+            AsyncStorage.setItem(STORE, JSON.stringify(obj))            
+            dispatch(receiveEntry(obj))
         })
         .catch(erro => {
             console.log('deleteItem erro', erro)

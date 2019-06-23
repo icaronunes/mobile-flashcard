@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react'
 import { Modal, View, Text, TextInput, TouchableHighlight } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
-import { saveQuestion } from '../constants/Date'
 
 export default class AddQuestionModal extends PureComponent {
 
@@ -37,19 +36,24 @@ export default class AddQuestionModal extends PureComponent {
                         onChangeText={(question) => this.setState({ question })}
                         value={this.state.question}
                     />
+                    <View style={{
+                        height: 20,
+                        flex: 1,
+                        backgroundColor: '#3f4'
+                    }} />
                     <View style={{ flexDirection: 'row', marginTop: 25 }}>
                         <TouchableHighlight style={{
-                            flex: 1
+                            flex: 1,
+                            height: 40
                         }}
                             onPress={() => {
-                                saveQuestion(this.props.id, this.state.question)
-                                console.log(this.props)
-                                this.props.handleModal();
+                                this.props.saveQuestion(this.props.id, this.state.question)
                             }}>
                             <Text>Salvar</Text>
                         </TouchableHighlight>
                         <TouchableHighlight style={{
-                            flex: 1
+                            flex: 1,
+                            height: 40
                         }}
                             onPress={() => {
                                 this.props.handleModal();

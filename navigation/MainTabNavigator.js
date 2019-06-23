@@ -9,11 +9,13 @@ import ListCardView from '../screens/ListCardView'
 import NewCard from '../screens/NewCard';
 import ManagerCard from '../screens/ManagerCard'
 import ItemCardList from '../screens/ItemCardList'
+import CardSwipe from '../screens/CardSwipe'
 
 const HomeStack = createStackNavigator({
   ListCardView: ListCardView,
   ItemCardList: ItemCardList,
-  ManagerCard: ManagerCard
+  ManagerCard: ManagerCard,
+  CardSwipe: CardSwipe
 });
 
 HomeStack.navigationOptions = {
@@ -32,7 +34,9 @@ HomeStack.navigationOptions = {
 
 const NewCardView = createStackNavigator({
   NewCard: NewCard,
-  ManagerCard: ManagerCard
+  ManagerCard: ManagerCard,
+  ListCardView: ListCardView,
+  CardSwipe: CardSwipe
 });
 
 NewCardView.navigationOptions = {

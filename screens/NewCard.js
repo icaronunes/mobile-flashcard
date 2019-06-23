@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react'
 import { View, TouchableOpacity, TextInput, StyleSheet } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { createCard, generateUID } from '../constants/Date'
+import { receiveEntry } from '../actions/index'
+import { connect } from 'react-redux'
 
 class NewCard extends PureComponent {
     state = {
@@ -12,7 +14,12 @@ class NewCard extends PureComponent {
         if (this.state.text !== '') {
             try {
                 let key = generateUID()
-                createCard(key, this.state.text).then(() => {
+                let result = createCard(key, this.state.text)
+                result.then(res => {
+                    this.setState({
+                        text: ''
+                    })
+                    this.props.save(res)
                     this.props.navigation.push('ManagerCard', { key: key })
                 })
             } catch (erro) {
@@ -42,7 +49,21 @@ NewCard.navigationOptions = {
     title: 'Criar Baralho',
 };
 
-export default NewCard;
+function mapStatetoProps(state) {
+    return {
+        cards: state
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        save(json) {
+            dispatch(receiveEntry(json))
+        }
+    }
+}
+
+export default connect(mapStatetoProps, mapDispatchToProps)(NewCard);
 
 const styles = StyleSheet.create({
     container: {

@@ -3,15 +3,16 @@ import { View, FlatList, Text, TouchableOpacity } from 'react-native'
 import ItemCardList from '../screens/ItemCardList'
 import { getAllCards, objectToArray } from '../constants/Date'
 import { connect } from 'react-redux'
-import { receiveEntry } from '../actions/index'
 class ListCardView extends PureComponent {
+
+  keyExtractor = (item, index) => item.key
 
   state = {
     cards: {}
   }
 
-  componentDidMount() {
-    const { putList } = this.props
+  componentDidMount() {  
+    const { putList } = this.props 
     putList()
   }
 
@@ -20,6 +21,7 @@ class ListCardView extends PureComponent {
   }
 
   render() {
+    console.log(this.props)
     let cards = this.props.cards
     if (Object.entries(cards).length === 0) {
       cards = []
@@ -40,6 +42,7 @@ class ListCardView extends PureComponent {
           </Text>
         </View>}
         data={cards}
+        keyExtractor={this.keyExtractor}
         renderItem={({ item }) => {
           return <TouchableOpacity onPress={() => { this.handleClickItem(item.key) }}>
             <ItemCardList key={item.key} item={item} />
@@ -53,18 +56,14 @@ ListCardView.navigationOptions = {
   title: 'Lista de Cartas',
 };
 
-function mapStateToProps(state) {
-  console.log('ListCardView', state)
+function mapStateToProps(state) { 
   return { cards: state }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    putList() {
-      getAllCards()
-        .then(result => {
-          dispatch(receiveEntry(result))
-        })
+    putList() { 
+      getAllCards(dispatch)
     }
   }
 }

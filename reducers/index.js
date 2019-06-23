@@ -4,7 +4,7 @@ function cards(state = {}, action) {
     switch (action.type) {
 
         case RECEIVE_CARDS: {
-            return { ...state, ...action.entries }
+            return action.entries
         }
 
         default:
