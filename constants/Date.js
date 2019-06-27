@@ -26,9 +26,9 @@ export async function saveQuestions(key, question, dispatch) {
     return await await AsyncStorage.getItem(STORE)
         .then(json => {
             let data = JSON.parse(json)
-            console.log('saveQuestions A', data[key].cards, 'key', key)                    
+            // console.log('saveQuestions A', data[key].cards, 'key', key)                    
             data[key].cards[generateUID()] = { question, ok: false }
-            console.log('saveQuestions B', data)
+            //console.log('saveQuestions B', data)
             AsyncStorage.setItem(STORE, JSON.stringify(data))
             dispatch(receiveEntry(data))
         })
@@ -38,9 +38,9 @@ export async function OkQuestion(key, keyQuestion, ok, dispatch) {
     return await await AsyncStorage.getItem(STORE)
         .then(json => {
             let data = JSON.parse(json)
-            console.log('saveQuestions A', data[key].cards[keyQuestion], 'key', key)                    
+            //  console.log('saveQuestions A', data[key].cards[keyQuestion], 'key', key)                    
             data[key].cards[keyQuestion]['ok'] = ok
-            console.log('saveQuestions B', data)
+            //   console.log('saveQuestions B', data)
             AsyncStorage.setItem(STORE, JSON.stringify(data))
             dispatch(receiveEntry(data))
         })
@@ -63,7 +63,7 @@ export async function deleteItem(key, dispatch) {
             obj[key] = undefined
             delete obj[key] //data[key] = undefined ASSIM??????
             console.log('deleteItem depois', obj)
-            AsyncStorage.setItem(STORE, JSON.stringify(obj))            
+            AsyncStorage.setItem(STORE, JSON.stringify(obj))
             dispatch(receiveEntry(obj))
         })
         .catch(erro => {

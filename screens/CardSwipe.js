@@ -1,42 +1,42 @@
 import CardStack, { Card } from 'react-native-card-stack-swiper';
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import { connect } from 'react-redux'
 import { OkQuestion } from '../constants/Date'
+import Result from '../screens/Result'
 
 class CardSwipe extends Component {
-
-    setTitle = (title) => {
-        navigationOptions = {
-            title: title,
-        };
+    constructor(props) {
+        super(props);
+        this.swiper = React.createRef();
     }
 
-    left = () => {
-        console.log('left')
+    left = (dataKey, key) => {
         this.props.change(dataKey, key, false)
     }
 
     right = (dataKey, key) => {
-        console.log('right')
         this.props.change(dataKey, key, true)
     }
 
     render() {
-
-        console.log(this.props)
         let data = this.props.navigation.state.params.card
-
-        this.setTitle(data.title)
-
+        console.log('map')
         return (
-            <View style={{ flex: 1 }}>
-                <CardStack style={styles.content} ref={swiper => { this.swiper = swiper }}>
+            <View style={{ flex: 1, martinTop: 45 }}>
+                <CardStack style={styles.content}
+                    ref={swiper => {
+                        this.swiper = swiper
+                    }}
+                    verticalSwipe={false}
+                    renderNoMoreCards={() => {
+                        return <Result />
+                    }}>
                     {Object.keys(data.cards).map(key => {
                         return <Card style={[styles.card, styles.card1]}
-                            key={key}
-                            onSwipedLeft={() => this.left(data.key, key, false)}
-                            onSwipedRight={() => this.right(data.key, key, true)}>
+                            onSwipedLeft={() => this.left(data.key, key)}
+                            onSwipedRight={() => this.right(data.key, key)}
+                            key={key}>
                             <Text
                                 style={styles.label}
                             >{data.cards[key].question}
@@ -50,36 +50,25 @@ class CardSwipe extends Component {
                         <TouchableOpacity style={[styles.button, styles.red]} onPress={() => {
                             this.swiper.swipeLeft();
                         }}>
-
+                            <Image source={require('../assets/images/sad.png')}
+                                resizeMode={'contain'} style={{ height: 32, width: 32, borderRadius: 5 }} />
                         </TouchableOpacity>
-                        <TouchableOpacity style={[styles.button, styles.orange]} onPress={() => {
-                            this.swiper.goBackFromLeft();
-                        }}>
-
-                        </TouchableOpacity>
+                        <View style={[styles.button, styles.orange]}>
+                            <Image source={require('../assets/images/question.png')}
+                                resizeMode={'contain'} style={{ height: 32, width: 32, borderRadius: 5 }} />
+                        </View>
                         <TouchableOpacity style={[styles.button, styles.green]} onPress={() => {
                             this.swiper.swipeRight();
                         }}>
-
+                            <Image source={require('../assets/images/happy.png')}
+                                resizeMode={'contain'} style={{ height: 32, width: 32, borderRadius: 5 }} />
                         </TouchableOpacity>
                     </View>
-
                 </View>
             </View>
         )
     }
 }
-
-//  <Image source={require('../assets/images/robot-dev.png')} resizeMode={'contain'} style={{ height: 62, width: 62 }} />
-// <Image source={require('../assets/imagens/robot-prod.png')} resizeMode={'contain'} style={{ height: 32, width: 32, borderRadius: 5 }} />
-//  <Image source={require('../assets/images/icon.png')} resizeMode={'contain'} style={{ height: 62, width: 62 }} />
-// CardSwipe.navigationOptions = {
-//     title: 'Swipe',
-// };
-// <Card style={[styles.card, styles.card1]}><Text style={styles.label}>A</Text></Card>
-// <Card style={[styles.card, styles.card2]}><Text style={styles.label}>B</Text></Card>
-// <Card style={[styles.card, styles.card1]}><Text style={styles.label}>C</Text></Card>
-
 
 const mapStateToProps = (state) => ({
 
@@ -87,7 +76,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = dispatch => {
     return {
-        change(dataKey, key, status) {            
+        change(dataKey, key, status) {
             OkQuestion(dataKey, key, status, dispatch)
         }
     }
@@ -100,6 +89,8 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         backgroundColor: '#f2f2f2',
+        alignItems: 'stretch',
+        justifyContent: 'center'
     },
     content: {
         flex: 5,
@@ -108,7 +99,7 @@ const styles = StyleSheet.create({
     },
     card: {
         width: 320,
-        height: 470,
+        height: 400,
         backgroundColor: '#FE474C',
         borderRadius: 5,
         shadowColor: 'rgba(0,0,0,0.5)',
@@ -125,17 +116,18 @@ const styles = StyleSheet.create({
         backgroundColor: '#FEB12C',
     },
     label: {
-        lineHeight: 400,
+        flex: 1,
         textAlign: 'center',
-        fontSize: 55,
+        fontSize: 40,
         fontFamily: 'System',
         color: '#ffffff',
-        backgroundColor: 'transparent',
+        backgroundColor: 'transparent'
     },
     footer: {
-        flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        marginBottom: 5,
+        marginTop: 4
     },
     buttonContainer: {
         width: 220,

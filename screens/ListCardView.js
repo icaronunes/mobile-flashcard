@@ -20,10 +20,9 @@ class ListCardView extends PureComponent {
     this.props.navigation.navigate('ManagerCard', { key: key })
   }
 
-  render() {
-    console.log(this.props)
+  render() {  
     let cards = this.props.cards
-    if (Object.entries(cards).length === 0) {
+    if (cards === null || Object.entries(cards).length === 0) {
       cards = []
     } else {
       cards = objectToArray(cards)

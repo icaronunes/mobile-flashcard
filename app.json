@@ -11,9 +11,9 @@
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/happy.png",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/question.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },

@@ -4,6 +4,7 @@ import AddQuestionModal from '../screens/AddQuestionModal'
 import { Ionicons } from '@expo/vector-icons';
 import { deleteItem, saveQuestions, objectToArray } from '../constants/Date'
 import { connect } from 'react-redux'
+import { ifStatement } from '@babel/types';
 
 function ViewCard(props) {
   return (
@@ -48,8 +49,10 @@ class ManagerCard extends PureComponent {
   }
 
   saveQuestion = (key, text) => {
-    this.props.save(key, text)
-    this.addQuestion()
+    if (text.length !== 0) {
+      this.props.save(key, text)
+      this.addQuestion()
+    }
   }
 
   render() {

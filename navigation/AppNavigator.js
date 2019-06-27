@@ -1,6 +1,5 @@
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import MainTabNavigator from './MainTabNavigator';
-import ListCardView from '../screens/ListCardView';
 import { connect } from 'react-redux'
 
 
