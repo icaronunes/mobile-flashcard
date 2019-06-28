@@ -5,14 +5,20 @@ import { connect } from 'react-redux'
 class Result extends Component {
 
     getPercent(cards) {
-        let ok = Object.keys(cards).filter(item => {
+        let key = this.props.data   
+        let ok = cards[key] && Object.keys(cards[key]).filter(item => {
             return cards[item].ok
         })
-        return parseFloat(((ok.length / Object.keys(cards).length) * 100).toFixed(1))
+        if (ok !== undefined) {
+            return parseFloat(((ok.length / Object.keys(cards[key]).length) * 100).toFixed(1))
+        } 
+
+        return 0
     }
     render() {
-
-        let card = this.props.card
+        console.log('mapStateToProps', this.props)
+        let key = this.props.data 
+        let card = this.props.card[key]
         let percent = this.getPercent(card.cards)
         return (<View style={{
             width: 320,
@@ -25,7 +31,7 @@ class Result extends Component {
 
             <Text style={percent > 50 &&
                 [styles.text, { color: '#040', backgroundColor: "#FFF" }]
-                || 
+                ||
                 styles.text
             }
 
@@ -37,8 +43,7 @@ class Result extends Component {
 }
 
 function mapStateToProps(state) {
-    let card = Object.keys(state).shift()
-    return { card: state[card] }
+    return { card: state }
 }
 
 export default connect(mapStateToProps)(Result)

@@ -6,6 +6,15 @@ import { OkQuestion } from '../constants/Date'
 import Result from '../screens/Result'
 
 class CardSwipe extends Component {
+
+    static navigationOptions = ({ navigation }) => ({
+        title: `${navigation.state.params.title}`,
+         headerTitleStyle : {textAlign: 'center',alignSelf:'center'},
+            headerStyle:{
+                backgroundColor:'white',
+            },
+        });
+
     constructor(props) {
         super(props);
         this.swiper = React.createRef();
@@ -21,7 +30,6 @@ class CardSwipe extends Component {
 
     render() {
         let data = this.props.navigation.state.params.card
-        console.log('map')
         return (
             <View style={{ flex: 1, martinTop: 45 }}>
                 <CardStack style={styles.content}
@@ -30,7 +38,7 @@ class CardSwipe extends Component {
                     }}
                     verticalSwipe={false}
                     renderNoMoreCards={() => {
-                        return <Result />
+                        return <Result data={data.key}/>
                     }}>
                     {Object.keys(data.cards).map(key => {
                         return <Card style={[styles.card, styles.card1]}

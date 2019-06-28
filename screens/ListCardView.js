@@ -16,8 +16,8 @@ class ListCardView extends PureComponent {
     putList()
   }
 
-  handleClickItem = (key) => {
-    this.props.navigation.navigate('ManagerCard', { key: key })
+  handleClickItem = (item) => {
+    this.props.navigation.navigate('ManagerCard', { key: item.key, title: item.title })
   }
 
   render() {  
@@ -43,7 +43,7 @@ class ListCardView extends PureComponent {
         data={cards}
         keyExtractor={this.keyExtractor}
         renderItem={({ item }) => {
-          return <TouchableOpacity onPress={() => { this.handleClickItem(item.key) }}>
+          return <TouchableOpacity onPress={() => { this.handleClickItem(item) }}>
             <ItemCardList key={item.key} item={item} />
           </TouchableOpacity>
         }} />

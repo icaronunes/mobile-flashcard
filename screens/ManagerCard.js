@@ -2,9 +2,8 @@ import React, { PureComponent } from 'react'
 import { View, TouchableOpacity, Text, FlatList, StyleSheet } from 'react-native'
 import AddQuestionModal from '../screens/AddQuestionModal'
 import { Ionicons } from '@expo/vector-icons';
-import { deleteItem, saveQuestions, objectToArray } from '../constants/Date'
+import { deleteItem, saveQuestions } from '../constants/Date'
 import { connect } from 'react-redux'
-import { ifStatement } from '@babel/types';
 
 function ViewCard(props) {
   return (
@@ -23,6 +22,14 @@ function ViewCard(props) {
   )
 }
 class ManagerCard extends PureComponent {
+
+  static navigationOptions = ({ navigation }) => ({
+    title: `${navigation.state.params.title}`,
+     headerTitleStyle : {textAlign: 'center',alignSelf:'center'},
+        headerStyle:{
+            backgroundColor:'white',
+        },
+    });
 
   state = {
     card: '',
@@ -45,7 +52,8 @@ class ManagerCard extends PureComponent {
 
   play = (data) => {
     console.log('play')
-    this.props.navigation.navigate('CardSwipe', { card: data })
+    let title = this.props.navigation.state.params.title
+    this.props.navigation.navigate('CardSwipe', { card: data, title: title })
   }
 
   saveQuestion = (key, text) => {
@@ -56,7 +64,7 @@ class ManagerCard extends PureComponent {
   }
 
   render() {
-
+    console.log(this.props)
     let key = this.props.navigation.state.params.key
     let cards = []
     let title = ''
@@ -71,7 +79,6 @@ class ManagerCard extends PureComponent {
       title = this.props.cards[key].title
       cards = this.props.cards[key].cards
     }
-    // console.log('ARRAY', cards)
 
     if (this.state.modal) {
       return <AddQuestionModal
