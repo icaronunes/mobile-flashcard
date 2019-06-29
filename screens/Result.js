@@ -5,21 +5,23 @@ import { connect } from 'react-redux'
 class Result extends Component {
 
     getPercent(cards) {
-        let key = this.props.data   
-        let ok = cards[key] && Object.keys(cards[key]).filter(item => {
+        let ok = Object.keys(cards).length > 0 && Object.keys(cards).filter(item => {
             return cards[item].ok
         })
-        if (ok !== undefined) {
-            return parseFloat(((ok.length / Object.keys(cards[key]).length) * 100).toFixed(1))
-        } 
-
+     
+        if (ok) {
+            return parseFloat(((ok.length / Object.keys(cards).length) * 100).toFixed(1))
+        }
         return 0
     }
     render() {
-        console.log('mapStateToProps', this.props)
-        let key = this.props.data 
+
+        let key = this.props.data
+
         let card = this.props.card[key]
+   
         let percent = this.getPercent(card.cards)
+
         return (<View style={{
             width: 320,
             height: 380,

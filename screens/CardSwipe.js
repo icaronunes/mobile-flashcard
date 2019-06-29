@@ -30,6 +30,7 @@ class CardSwipe extends Component {
 
     render() {
         let data = this.props.navigation.state.params.card
+        console.log('cardSwipe', data)
         return (
             <View style={{ flex: 1, martinTop: 45 }}>
                 <CardStack style={styles.content}

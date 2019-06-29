@@ -13,8 +13,7 @@ export default class AddQuestionModal extends PureComponent {
             animationType="slide"
             transparent={false}
             visible={this.props.visible}
-            onRequestClose={() => {
-                console.log("Close")
+            onRequestClose={() => {               
                 this.props.handleModal()
             }} >
             <View>
