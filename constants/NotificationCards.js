@@ -20,7 +20,7 @@ async function setNotification() {
         },
             {
                 time: (new Date()).getTime() + 1000,
-                repeat: 'minute'
+                repeat: 'day'
             })
     }
 }
