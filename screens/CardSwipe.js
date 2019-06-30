@@ -9,11 +9,11 @@ class CardSwipe extends Component {
 
     static navigationOptions = ({ navigation }) => ({
         title: `${navigation.state.params.title}`,
-         headerTitleStyle : {textAlign: 'center',alignSelf:'center'},
-            headerStyle:{
-                backgroundColor:'white',
-            },
-        });
+        headerTitleStyle: { textAlign: 'center', alignSelf: 'center' },
+        headerStyle: {
+            backgroundColor: 'white',
+        },
+    });
 
     constructor(props) {
         super(props);
@@ -39,7 +39,7 @@ class CardSwipe extends Component {
                     }}
                     verticalSwipe={false}
                     renderNoMoreCards={() => {
-                        return <Result data={data.key}/>
+                        return <Result data={data.key} />
                     }}>
                     {Object.keys(data.cards).map(key => {
                         return <Card style={[styles.card, styles.card1]}

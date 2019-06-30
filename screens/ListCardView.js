@@ -11,7 +11,7 @@ class ListCardView extends PureComponent {
     cards: {}
   }
 
-  componentDidMount() {  
+  componentDidMount() {
     const { putList } = this.props 
     putList()
   }

@@ -1,8 +1,13 @@
 import React, { Component } from 'react'
 import { Text, View, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
+import { getPermission } from '../constants/NotificationCards'
 
 class Result extends Component {
+
+    componentDidMount(){
+        getPermission()
+    }
 
     getPercent(cards) {
         let ok = Object.keys(cards).length > 0 && Object.keys(cards).filter(item => {
