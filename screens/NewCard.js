@@ -6,6 +6,7 @@ import { receiveEntry } from '../actions/index'
 import { connect } from 'react-redux'
 
 class NewCard extends PureComponent {
+
     state = {
         text: ''
     }
@@ -15,12 +16,12 @@ class NewCard extends PureComponent {
             try {
                 let key = generateUID()
                 let result = createCard(key, this.state.text)
-                result.then(res => {
+                result.then(res => {                   
+                    this.props.save(res)
+                    this.props.navigation.push('ManagerCard', { key: key, title:  this.state.text })
                     this.setState({
                         text: ''
                     })
-                    this.props.save(res)
-                    this.props.navigation.push('ManagerCard', { key: key })
                 })
             } catch (erro) {
                 console.log("ERRO", erro)
