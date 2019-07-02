@@ -15,6 +15,17 @@ class CardSwipe extends Component {
         },
     });
 
+    state = {
+        end: false
+    }
+
+    goBack() {
+        console.log('goBack')
+        if (this.state.end) {
+            this.props.navigation.pop()
+        }
+    }
+
     constructor(props) {
         super(props);
         this.swiper = React.createRef();
@@ -30,7 +41,7 @@ class CardSwipe extends Component {
 
     render() {
         let data = this.props.navigation.state.params.card
-        console.log('cardSwipe', data)
+
         return (
             <View style={{ flex: 1, martinTop: 45 }}>
                 <CardStack style={styles.content}
@@ -38,6 +49,13 @@ class CardSwipe extends Component {
                         this.swiper = swiper
                     }}
                     verticalSwipe={false}
+                    onSwiped={(index) => {
+                        console.log('index', index)
+                        console.log('index obj', Object.keys(data.cards).length)
+                        this.setState(({
+                            end: (Object.keys(data.cards).length - 1) === index
+                        }))
+                    }}
                     renderNoMoreCards={() => {
                         return <Result data={data.key} />
                     }}>
@@ -62,10 +80,14 @@ class CardSwipe extends Component {
                             <Image source={require('../assets/images/sad.png')}
                                 resizeMode={'contain'} style={{ height: 32, width: 32, borderRadius: 5 }} />
                         </TouchableOpacity>
-                        <View style={[styles.button, styles.orange]}>
-                            <Image source={require('../assets/images/question.png')}
+                        <TouchableOpacity style={[styles.button, styles.orange]}
+                            onPress={() =>  this.goBack()}
+                        >
+                            <Image source={this.state.end
+                                ? require('../assets/images/door.png')
+                                : require('../assets/images/question.png')}
                                 resizeMode={'contain'} style={{ height: 32, width: 32, borderRadius: 5 }} />
-                        </View>
+                        </TouchableOpacity>
                         <TouchableOpacity style={[styles.button, styles.green]} onPress={() => {
                             this.swiper.swipeRight();
                         }}>
