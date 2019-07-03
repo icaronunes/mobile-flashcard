@@ -64,7 +64,7 @@ class ManagerCard extends PureComponent {
   }
 
   render() {
-    console.log(this.props)
+   // console.log(this.props)
     let key = this.props.navigation.state.params.key
     let cards = []
     let title = ''

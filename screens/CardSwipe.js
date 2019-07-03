@@ -20,7 +20,7 @@ class CardSwipe extends Component {
     }
 
     goBack() {
-        console.log('goBack')
+        console.log('goBack', this.props)
         if (this.state.end) {
             this.props.navigation.pop()
         }
@@ -41,7 +41,10 @@ class CardSwipe extends Component {
 
     render() {
         let data = this.props.navigation.state.params.card
-
+        if(!data) {
+            data = this.props.state[this.props.navigation.state.params.key]
+        }
+        console.log('CardSwipe', this.props)
         return (
             <View style={{ flex: 1, martinTop: 45 }}>
                 <CardStack style={styles.content}
@@ -50,14 +53,12 @@ class CardSwipe extends Component {
                     }}
                     verticalSwipe={false}
                     onSwiped={(index) => {
-                        console.log('index', index)
-                        console.log('index obj', Object.keys(data.cards).length)
                         this.setState(({
                             end: (Object.keys(data.cards).length - 1) === index
                         }))
                     }}
                     renderNoMoreCards={() => {
-                        return <Result data={data.key} />
+                        return <Result data={data.key} goBack={this.props.navigation} />
                     }}>
                     {Object.keys(data.cards).map(key => {
                         return <Card style={[styles.card, styles.card1]}
@@ -81,7 +82,7 @@ class CardSwipe extends Component {
                                 resizeMode={'contain'} style={{ height: 32, width: 32, borderRadius: 5 }} />
                         </TouchableOpacity>
                         <TouchableOpacity style={[styles.button, styles.orange]}
-                            onPress={() =>  this.goBack()}
+                            onPress={() => this.goBack()}
                         >
                             <Image source={this.state.end
                                 ? require('../assets/images/door.png')
@@ -101,9 +102,11 @@ class CardSwipe extends Component {
     }
 }
 
-const mapStateToProps = (state) => ({
-
-})
+function mapStateToProps(state) {
+    return {
+      state: state
+    }
+  }
 
 const mapDispatchToProps = dispatch => {
     return {

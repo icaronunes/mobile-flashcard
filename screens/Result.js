@@ -1,19 +1,29 @@
 import React, { Component } from 'react'
-import { Text, View, StyleSheet } from 'react-native'
+import { Text, View, StyleSheet, Button } from 'react-native'
 import { connect } from 'react-redux'
 import { getPermission } from '../constants/NotificationCards'
+import { restart } from '../constants/Date'
 
 class Result extends Component {
 
-    componentDidMount(){
+    componentDidMount() {
         getPermission()
+    }
+
+    restartCards(key) {
+        console.log('restartCards', this.props)
+        let store = this.props.back(key)
+        let navigation = this.props.goBack
+        navigation.replace('CardSwipe',
+            { key: key, title: navigation.state.params.title})
+            console.log('restartCards - Store', store)
     }
 
     getPercent(cards) {
         let ok = Object.keys(cards).length > 0 && Object.keys(cards).filter(item => {
             return cards[item].ok
         })
-     
+
         if (ok) {
             return parseFloat(((ok.length / Object.keys(cards).length) * 100).toFixed(1))
         }
@@ -24,9 +34,9 @@ class Result extends Component {
         let key = this.props.data
 
         let card = this.props.card[key]
-   
-        let percent = this.getPercent(card.cards)
 
+        let percent = this.getPercent(card.cards)
+        console.log('Result', this.props)
         return (<View style={{
             width: 320,
             height: 380,
@@ -45,6 +55,12 @@ class Result extends Component {
             >{percent}%</Text>
 
             <Text style={styles.text}>Acertos</Text>
+
+            <Button title={'Restart Pontos'} onPress={() =>
+                this.restartCards(key)
+            } />
+
+
         </View>)
     }
 }
@@ -53,7 +69,14 @@ function mapStateToProps(state) {
     return { card: state }
 }
 
-export default connect(mapStateToProps)(Result)
+const mapDispatchToProps = dispatch => {
+    return {
+        back(key) {
+            restart(key, dispatch)
+        }
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Result)
 
 const styles = StyleSheet.create({
     text: {
@@ -65,3 +88,4 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     }
 })
+

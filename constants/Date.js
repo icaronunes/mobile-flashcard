@@ -50,12 +50,22 @@ export async function getAllCards(dispatch) {
         })
 }
 
+export async function restart(key, dispatch) {
+    let data = await AsyncStorage.getItem(STORE)
+    let store = JSON.parse(data)
+    Object.keys(store[key].cards).forEach(keyCard => {
+        store[key].cards[keyCard].ok = false
+    })        
+    dispatch(receiveEntry(store))
+    return store
+}
+
 export async function deleteItem(key, dispatch) {
     return await AsyncStorage.getItem(STORE)
         .then((result) => {
             let obj = JSON.parse(result)
             obj[key] = undefined
-            delete obj[key] 
+            delete obj[key]
             AsyncStorage.setItem(STORE, JSON.stringify(obj))
             dispatch(receiveEntry(obj))
         })
